@@ -5,6 +5,7 @@ Official plugins for [Aurral](https://github.com/lklynet/aurral).
 | Plugin | What it does |
 | --- | --- |
 | [Lidarr](lidarr) | Downloads albums through Lidarr and plays them from Lidarr's folders. |
+| [Metadata](metadata) | Embeds covers, saves lyrics, adds release details, cleans junk tags, and adds ReplayGain. |
 | [Road Trip](road-trip) | Turns Google Maps directions into a playlist as long as the drive. |
 | [Setlists](setlists) | Imports setlist.fm links as playlists: one show, or an artist's current tour. |
 
@@ -21,6 +22,8 @@ Aurral checks this repo for new versions once a day and shows **Update** on each
 ## Contributing
 
 Each plugin is a folder with a `manifest.json`, an `index.js`, and a `README.md`. The [plugin API](https://docs.aurral.org/api/plugins/) covers the rest. A release publishes every plugin in the repo, so bump the `version` of each plugin you changed.
+
+Aurral installs no packages, so a plugin that uses one keeps it bundled in its `vendor` folder. Run `pnpm install && pnpm build` after changing a version in `package.json`, and commit the result.
 
 ## License
 
