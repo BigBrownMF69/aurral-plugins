@@ -25,7 +25,7 @@ Needs an Aurral with plugins, currently nightly.
 | **Add ReplayGain** | Measures each track's loudness with ffmpeg and adds track and album gain, for other players: Subsonic apps, another server reading the same folder, or files you copy to a phone. Aurral levels volume on its own and doesn't need it. Opus files get R128 gains. Uses a lot of CPU. |
 | **Replace existing values** | Off, the plugin only fills in what a file is missing, and keeps a cover, lyrics, details, or ReplayGain the file already has. On, it replaces them. |
 | **Sweep the library every night** | Goes through the Library once a night and does what's turned on, like a cron job, for files that are new or changed since the plugin last handled them. See [Nightly sweep](#nightly-sweep). |
-| **Hour to start the sweep** | 0 to 23, in the server's time zone, which is UTC unless the container sets `TZ`. Empty starts at 3. |
+| **Hour to start the sweep** | 0 to 23, in the server's time zone, which is UTC unless the container sets `TZ`. Empty starts at 3. The sweep stops 6 hours later. |
 | **Dry run** | Logs what the plugin would change, under `plugin:metadata` in Aurral's log, without changing any file. Downloads it handles in a dry run leave the queue, so turn on the sweep to pick them up later. |
 
 ## Use
@@ -35,12 +35,14 @@ Needs an Aurral with plugins, currently nightly.
 **Your library.** Choose **Fix metadata** in an album's or a track's menu. Only admins see it. It runs in the background, and its message says what changed.
 
 - The plugin only changes files in the Library folder. Read-only folders belong to other apps, like Lidarr, so it skips them, and it skips Aurral's own folders, like flows.
-- It writes each file to a copy beside it and moves the copy into place, so a crash never leaves half a file. A file hardlinked from a download client, like a torrent that's still seeding, gets its own copy and the client's file stays as it was.
+- When the new tags fit in the space the old ones took, as they usually do in FLAC and MP3 files, it writes only the bytes that changed. A crash in the middle can leave the tags half written, but never the audio.
+- When the tags don't fit, it writes the file to a copy beside it and moves the copy into place, so a crash never leaves half a file. The copy gets 64 KB of spare tag space in FLAC and MP3 files, so the next edits fit.
+- A file hardlinked from a download client, like a torrent that's still seeding, always gets its own copy, and the client's file stays as it was.
 - Album gain covers every track of the album in the folder. When a track joins the album later, the plugin measures the album again and updates its other tracks.
 - It caches what MusicBrainz says about each release for 30 days in its data folder.
 - Each album folder it changes gets a line in Aurral's log under `plugin:metadata`.
 
-**Nightly sweep.** With the sweep on, the 15-minute run starts a pass over every album folder in the Library once a day at the hour you set, after any new downloads. It saves its place in its data folder, so a big library carries on over as many runs as it needs.
+**Nightly sweep.** With the sweep on, the 15-minute run starts a pass over every album folder in the Library once a day at the hour you set, after any new downloads, and works on it for 6 hours. It saves its place in its data folder, so a big library carries on over as many runs, and nights, as it needs.
 
 - The plugin records each file's size and modified time after it handles the file, from the sweep, a download, or **Fix metadata**. A sweep only opens files that are new or changed since then, such as an album another app imported or retagged, so a night with nothing new takes about a second.
 - Changing a setting that affects files, or updating the plugin, has the next sweep look at every file again.
