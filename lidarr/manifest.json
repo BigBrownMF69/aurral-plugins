@@ -1,7 +1,7 @@
 {
   "id": "lidarr",
   "name": "Lidarr",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "api": 1,
   "description": "Downloads albums through Lidarr. Lidarr grabs and files each album in its own folder, and Aurral plays it from there.",
   "repository": "https://github.com/lklynet/aurral-plugins",
@@ -31,7 +31,7 @@
   "test": true,
   "actions": [],
   "events": [],
-  "downloadSource": { "tracks": false, "albums": true },
+  "downloadSource": { "tracks": false, "albums": true, "keeps": true },
   "importList": null,
   "schedule": null,
   "apiAccess": false

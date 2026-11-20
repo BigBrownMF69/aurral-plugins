@@ -17,7 +17,7 @@ Turn on tags in Lidarr under **Settings > Metadata > Tag Audio Files with Metada
 
 ## Use
 
-Lidarr joins your other download sources, and its priority decides when Aurral tries it. Request an album as usual. A single track comes from its album.
+Lidarr joins your other download sources, and its priority decides when Aurral tries it. Request an album as usual. Lidarr gets only the albums you request: single tracks, playlist tracks, and flow tracks come from your other download sources, because Lidarr would keep and monitor a whole album for one track.
 
 - If the artist isn't in Lidarr, the plugin adds it to Lidarr's first root folder, or the one you name in the settings, with that folder's default profiles and the tag `aurral-plugin`. It monitors only the album you asked for.
 - If the artist is already in Lidarr, the plugin monitors the album and starts a search.
